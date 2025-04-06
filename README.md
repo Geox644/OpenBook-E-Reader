@@ -1,5 +1,9 @@
 # OpenBook Reader
 
+## Diagrama Bloc
+![Diagrama bloc](Images/Diagram.png)
+
+
 ## Bill Of Materials (BOM)
 
 | Componenta | Link | Datasheet |
