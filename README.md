@@ -1,8 +1,95 @@
 # OpenBook Reader
+<br>
+Proiectul consta in realizarea unui E-Book Reader accesibil, cu un ecran ce imita hartia, special pentru a avea un consum redus de energie, dar si pentru a oferi utilizatorului o excperinta cat mai placuta. Dispozitivul a fost proiectat de la zero: crearea schemei electrice cu componentele hardware, realizarea 2D PCB + procesul de rutare, trecerea in plan 3D.
+
+<br>
 
 ## Diagrama Bloc
 ![Diagrama bloc](Images/Diagram.png)
 
+<br>
+
+## Descriere functionalitati hardware
+
+### ESP32-C6
+
+* Rol: ESP32-C6 este microcontroller-ul, practic creierul dispozitivului care controleaza toate componentele, gestioneaza si datele.
+* Arhitectura: RISC-V 32-bit
+* Protocoale: GPIO, I2C, UART, SPI,  PWM
+* Memorie:  SD + Flash
+* Consum: 10mA (idle), 200mA (WiFi activat)
+
+### MAX17048
+
+* Rol: MAX17048 este monitorul bateriei care vede in timp real nivelul bateriei LiPo si procentul de încarcare.
+* Protocol: I2C, SCL: IO6, SDA: IO7
+
+### MCP73831
+
+* Rol: Controloeaza incarcarea eficienta acumulatorul LiPo prin port-ul USB.
+* Capacitate: ~500 mA
+
+### XC6204
+
+* Rol: XC6204 reprezinta regulator-ul LDO care reduce tensiunea de la 5V la 3.3V pentru alimentarea sigura a componentelor.
+
+### RTC – DS3231
+
+* Rol: Tine ora exacta chiar si fara alimentare, pentru afisarea corecta a timpului.
+* Protocol: I2C, SCL: IO6, SDA: IO7
+* Consum: 0.15mA
+
+### BME688 SENSOR
+
+* Rol: Masoara temperatura, umiditatea, etc.
+* Protocol: I2C, SCL: IO6, SDA: IO7
+* Consum: 3.1mA
+
+### Card SD
+
+* Rol: Salvarea datelor pe dispozitiv.
+* Protocol: SPI (pini IO18–IO22)
+* Consum: 50mA
+
+### W25Q512JV
+
+* Rol: W25Q512JV este memoria Flash care stocheaza resurse statice folosite de sistemul dispozitivului.
+* Protocol: SPI (pini IO18–IO21)
+* Consum: 25mA
+
+### Butoane
+
+* Rol: Permite interactiunea manuala a utilizatorului cu dispozitivul.
+* Exista 3 tipuri de butoane (Reset, Boot, Change)
+* Protocol: GPIO
+
+### E-INK DISPLAY
+
+* Rol: Afisarea continutului/informatiilor de pe dispozitiv. Are un consum redus, deoarece foloseste putine semnale, curentul este necesar atunci cand imaginea se schimba si ramane afisata fara alimentare continua.
+* Protocol: GPIO, SPI
+* Consum: 40mA
+
+  <br>
+
+## Interfete si pinii de comunicare
+
+| Componente | Interfete | Pini ESP32-C6 |
+|-----------|--------------|-----------|
+| I2C | BME688, RTC, Battery | SDA (IO22), SCL (IO21) |
+| SPI | SD Card, E-paper, NOR Flash | SCK (IO6), MOSI (IO7), MISO (IO2) |
+| GPIO | Buttons | IO0 - IO23 |
+| USB | Conectare alte dispozitive / incarcare | USB_D+/D- (IO13/IO12) |
+
+<br>
+
+## Observatii
+
+* Modelul 3D al TP-urilor a fost realizat manual de catre mine si au fost pizitionate pe marginea placutei, cat mai aproape de componentele cu care aveau lagaturi
+* Au fost facute modificari de footprint pentru U4 – MAX17048G+T10, deoarece alimentarea VBAT a fost proiectata cu o latime de 0.3mm, iar footprint-ul avea o latime a pinilor de 0.27mm.
+* Componentele, dimensiunile si pozitiile acestora respecta cat de mult se poate design-ul de referinta.
+* ~140 vias PCB
+  
+<br>
 
 ## Bill Of Materials (BOM)
 
